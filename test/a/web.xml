@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<web-app>
+	<servlet>
+		<servlet-name>qwer</servlet-name>
+		<servlet-class>wsTest/TestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>qwer</servlet-name>
+		<url-pattern>/ccc</url-pattern>
+	</servlet-mapping>
+</web-app>
