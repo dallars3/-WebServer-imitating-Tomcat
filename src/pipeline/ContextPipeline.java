@@ -10,11 +10,9 @@ import value.Value;
 
 
 public class ContextPipeline implements Pipeline {
-	private final Container container;
 	private Context firstContext;
-	private StandardContext standardContext;
+	private final StandardContext standardContext;
 	public ContextPipeline(Container container) {
-		this.container = container;
 		standardContext = new StandardContext(container);
 	}
 	@Override
@@ -22,14 +20,17 @@ public class ContextPipeline implements Pipeline {
 		return firstContext;
 	}
 	public void addContext(File path){
-		
-		if(firstContext == null){
-			firstContext = new Context(path, standardContext);
-		}else{
-			Context temp = firstContext;
-			while(temp.getNext() == null){
-				temp.setNext(new Context(path, standardContext));
+		Context newContext = new Context(path, standardContext);
+		synchronized (this) {
+			if(firstContext == null){
+				firstContext = newContext;
+			}else{
+				Context temp = firstContext;
+				while(temp.getNext() == null){
+					temp.setNext(newContext);
+				}
 			}
 		}
+	
 	}
 }

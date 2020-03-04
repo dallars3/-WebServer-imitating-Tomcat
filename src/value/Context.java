@@ -3,6 +3,7 @@ package value;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.omg.CORBA.portable.InvokeHandler;
 
@@ -14,7 +15,7 @@ import util.MyClassLoader;
 import util.XMLParser;
 
 public class Context implements Value{
-	private File path;
+	private final File path;
 	private Context nextContext;
 	private final WrapperPipeline wrapperPipeline;
 	private final StandardContext standardContext;
@@ -26,8 +27,7 @@ public class Context implements Value{
 	}
 	private void initWrapper(){
 		wrapperPipeline.setURLMap(XMLParser.parser(new File(path.getAbsolutePath() + "\\web.xml")));
-		HashMap<String, Class<?>> classMap = MyClassLoader.load(path);
-		
+		ConcurrentHashMap<String, Class<?>> classMap = MyClassLoader.load(path);
 		Iterator<String> it = classMap.keySet().iterator();
 		while(it.hasNext()){
 			String name = it.next();
@@ -42,9 +42,6 @@ public class Context implements Value{
 	public File getPath() {
 		return path;
 	}
-	public void setPath(File path) {
-		this.path = path;
-	}
 	public Value getNext() {
 		return nextContext;
 	}
@@ -58,7 +55,6 @@ public class Context implements Value{
 			standardContext.run(this, request, response);
 			return;
 		}
-		//System.out.println(contextPath+" "+reqPath);
 		nextContext.invoke(request, response);
 		
 	}

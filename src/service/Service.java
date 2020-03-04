@@ -2,22 +2,19 @@ package service;
 
 
 public class Service {
-	static Service service = null;
-	private Connector connector = null;
-	private Container container = null;
+	private final static Service service = new Service();
+	private final Connector connector1;
+	private final Container container;
 	private static final String WEB_PATH = "e:/test";
 	private Service(){
 		container = new Container(WEB_PATH);
+		connector1 = new HttpConnector(this);
 	}
 	public static Service getService(){
-		if(service == null) service = new Service();
 		return service;
 	}
 	public void start(){
-		connector = new HttpConnector(this);
-		new Thread(connector).start();
-		
-		
+		new Thread(connector1).start();
 	}
 	public Container getContainer(){
 		return container;

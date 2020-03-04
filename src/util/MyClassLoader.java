@@ -7,19 +7,25 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.enterprise.inject.New;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 public class MyClassLoader {
-	public synchronized static HashMap<String, Class<?>> load(File clazzPath){
+	public static ConcurrentHashMap<String, Class<?>> load(File clazzPath){
 		//compiler();
 		clazzPath = new File(clazzPath.getAbsolutePath() + "/bin");
 		ArrayList<File> fileList = new ArrayList<File>();
 		fileList = traversalFile(clazzPath, fileList);
 		loadPath(clazzPath);
 		Iterator<File> it = fileList.iterator();
-		HashMap<String, Class<?>> classMap = new HashMap<String, Class<?>>();
+		ConcurrentHashMap<String, Class<?>> classMap 
+				= new ConcurrentHashMap<String, Class<?>>();
 		while(it.hasNext()){
 			loadClass(it.next(), classMap);
 		}
@@ -58,7 +64,7 @@ public class MyClassLoader {
             method.setAccessible(accessible);
         }
 	}
-	private static Class<?> loadClass(File subFile, HashMap<String, Class<?>> classMap){      
+	private static Class<?> loadClass(File subFile, ConcurrentHashMap<String, Class<?>> classMap){      
         String className = subFile.getAbsolutePath();
         className = className.split("\\\\bin\\\\")[1].split("\\.class")[0];
         String name = new String(className.replace('\\', '/'));

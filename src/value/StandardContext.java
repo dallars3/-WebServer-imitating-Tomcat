@@ -3,13 +3,9 @@ package value;
 import java.io.File;
 import java.io.IOException;
 
-import javax.ejb.FinderException;
-
-import pipeline.WrapperPipeline;
 import service.Container;
 import service.Request;
 import service.Response;
-import util.MyClassLoader;
 
 public class StandardContext implements StandardValue{
 	private final Container container;
@@ -20,7 +16,6 @@ public class StandardContext implements StandardValue{
 	public void run(Value value, Request request, Response response){
 		response.setContext(((Context)value).getPath().getAbsolutePath());
 		String file = findFile((Context)value, request.getServletPath());
-		
 		if(file != null){
 			try {
 				response.sendRedirect(file);
@@ -29,7 +24,6 @@ public class StandardContext implements StandardValue{
 			}
 			return;
 		}
-		MyClassLoader.load(((Context)value).getPath());
 		((Context)value).getPipeline().getFirst().invoke(request, response);
 		
 	}

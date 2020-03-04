@@ -7,7 +7,7 @@ import java.io.IOException;
 import service.Response;
 
 public class FileTransfer {
-	public synchronized static String run(File file, Response response){
+	public static String run(File file, Response response){
 		String res = readFile(file);
 		switch(file.getName().split(".")[1]){
 		case "html":
@@ -16,7 +16,7 @@ public class FileTransfer {
 		}
 		return res;
 	}
-	public synchronized static String readFile(File file){
+	public static String readFile(File file){
 		FileInputStream fis = null;
 		String reString = null;
 		try {
@@ -24,10 +24,9 @@ public class FileTransfer {
     		byte[] str = new byte[1024*1024];
             int len = 0;
     		len = fis.read(str);
-            reString = new String(str, 0, len);
+            reString = new String(str, 0, len);       
 		} catch (IOException e) {
 			e.printStackTrace();
-			
 		}
 		try {
 			fis.close();

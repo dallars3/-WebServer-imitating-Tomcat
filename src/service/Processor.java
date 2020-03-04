@@ -37,6 +37,7 @@ public class Processor implements Runnable {
 			connector.getService().getContainer().getSession(req);
 		}
 		Value c = connector.getService().getContainer().getPipeline().getFirst();
+		
 		try {
 			c.invoke(req, response);
 		} catch (Exception e) {
@@ -51,16 +52,15 @@ public class Processor implements Runnable {
 			is.close();
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 
 	}
 	private void sendFile(Response response){
-		String path = response.getContext() + response.getFile();
+		String path = response.getContext() + response.getFile();	
 		String data = FileTransfer.readFile(new File(path));
-		PrintWriter pw = new PrintWriter(os);
+		PrintWriter pw = new PrintWriter(os);	
 		pw.write(response.getHead());
 		pw.write("\r\n");
 		pw.write(data);
