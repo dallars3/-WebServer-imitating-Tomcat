@@ -25,8 +25,9 @@ public class Context implements Value{
 		wrapperPipeline = new WrapperPipeline();
 		initWrapper();
 	}
+	//将该webapp下所有servlet封装入Wrapper
 	private void initWrapper(){
-		wrapperPipeline.setURLMap(XMLParser.parser(new File(path.getAbsolutePath() + "\\web.xml")));
+		wrapperPipeline.setUrlMap(XMLParser.parser(new File(path.getAbsolutePath() + "\\web.xml")));
 		ConcurrentHashMap<String, Class<?>> classMap = MyClassLoader.load(path);
 		Iterator<String> it = classMap.keySet().iterator();
 		while(it.hasNext()){
@@ -42,12 +43,15 @@ public class Context implements Value{
 	public File getPath() {
 		return path;
 	}
+	@Override
 	public Value getNext() {
 		return nextContext;
 	}
+	@Override
 	public void setNext(Value next) {
 		this.nextContext = (Context)next;
 	}
+	@Override
 	public void invoke(Request request, Response response) {
 		String reqPath = request.getServletPath().split("/")[1];
 		String contextPath = path.getName();

@@ -11,6 +11,7 @@ import value.Value;
 
 public class ContextPipeline implements Pipeline {
 	private Context firstContext;
+	//最终处理Context的对象
 	private final StandardContext standardContext;
 	public ContextPipeline(Container container) {
 		standardContext = new StandardContext(container);

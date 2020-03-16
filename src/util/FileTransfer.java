@@ -13,6 +13,8 @@ public class FileTransfer {
 		case "html":
 			response.appendHead("content-type: text/html;\r\n");
 			break;
+		default:
+			break;
 		}
 		return res;
 	}

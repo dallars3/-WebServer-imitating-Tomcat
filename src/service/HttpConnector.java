@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
 
 public class HttpConnector implements Connector{
+	//端口号
 	private final int PORT = 8090;
 	private final Service service;
 	private ExecutorService executor;
@@ -20,6 +21,7 @@ public class HttpConnector implements Connector{
 	}
 	@Override
 	public void run() {
+		//处理Http连接的连接池
 		executor = new ThreadPoolExecutor
 				(1, 8, 1, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(16));
 		ServerSocket ss;
@@ -27,7 +29,6 @@ public class HttpConnector implements Connector{
 			ss = new ServerSocket(PORT);
 			while(true){
 				Socket socket = ss.accept();
-				//new Thread(new Processor(socket, this)).start();
 				executor.submit(new Processor(socket, this));
 				
 			}
@@ -37,6 +38,7 @@ public class HttpConnector implements Connector{
 			
 		}
 	}
+	@Override
 	public Service getService(){
 		return service;
 	}

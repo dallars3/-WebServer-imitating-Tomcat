@@ -48,8 +48,9 @@ public class Request implements HttpServletRequest {
 		this.parameterMap = parameterMap;	
 	}
 	public boolean hasCookie(){
-		if(cookieList.size() == 0)
+		if(cookieList.size() == 0){
 			return false;
+		}
 		return true;
 	}
 	public void setSession(HttpSession session){
@@ -202,8 +203,12 @@ public class Request implements HttpServletRequest {
 	@Override
 	public int getServerPort() {
 		String[] temp = headers.get("Host").split(":");
-		if(temp.length == 2) return Integer.parseInt(temp[1]);
-		else return -1;
+		if(temp.length == 2){ 
+			return Integer.parseInt(temp[1]);
+		}
+		else{
+			return -1;
+		}
 	}
 
 	@Override
@@ -274,7 +279,7 @@ public class Request implements HttpServletRequest {
 
 	@Override
 	public Cookie[] getCookies() {
-		return	(Cookie[])cookieList.toArray();
+		return	(Cookie[])cookieList.toArray(new Cookie[cookieList.size()]);
 	}
 
 	@Override

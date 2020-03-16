@@ -6,9 +6,12 @@ import java.util.HashMap;
 import javax.servlet.http.Cookie;
 
 public class RequestFactory {
+	//根据String构建request对象
 	public synchronized static Request createRequest(String head, String content){
+		//保存get传的参数
 		StringBuilder contentsb = new StringBuilder();
 		HashMap<String, String> headers = createHead(head, contentsb);
+		//get传参时，参数的提取
 		if(content == null && contentsb.length() != 0){
 			content = new String(contentsb);
 		}else if(content != null && contentsb.length() != 0){
@@ -20,6 +23,7 @@ public class RequestFactory {
 		ArrayList<Cookie> cookieList = createCookie(headers);
 		return new Request(headers, cookieList, parameterMap);	
 	}
+	//构建request头部
 	private static HashMap<String, String> createHead(String head, StringBuilder content){
 		HashMap<String, String> headers = new HashMap<String, String>();
 		String[] headArr = head.split("\r\n");
@@ -37,9 +41,12 @@ public class RequestFactory {
 		}
 		return headers;
 	}
+	//构建request参数
 	private static HashMap<String, String[]> createContent(String content){
 		HashMap<String, String[]> parameterMap = new HashMap<String, String[]>();
-		if(content == null) return null;
+		if(content == null){
+			return null;
+		}
 		String[] datas = content.split("&");
 		for(int i = 0; i < datas.length; i ++){
 			String[] temp = datas[i].split("=");
@@ -58,6 +65,7 @@ public class RequestFactory {
 		return parameterMap;
 		
 	}
+	//提取cookie
 	private static ArrayList<Cookie> createCookie(HashMap<String, String> headers){
 		ArrayList<Cookie> cookieList = new ArrayList<Cookie>();
 		String[] cookieStrs;

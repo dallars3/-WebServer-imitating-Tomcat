@@ -25,25 +25,27 @@ public class Processor implements Runnable {
 		String reqString = read();
 		String[] reqStrings = parse(reqString);
 		Request req;
+		//request是否有参数
 		if(reqStrings.length == 2){
 			req = RequestFactory.createRequest(reqStrings[0], reqStrings[1]);
 		}else{
 			req = RequestFactory.createRequest(reqStrings[0], null);
 		}
 		Response response = new Response(os);
+		//request是否带有JSessionID
 		if( ! req.hasCookie()){
 			connector.getService().getContainer().createSession(req, response);
 		}else{
 			connector.getService().getContainer().getSession(req);
 		}
+		//传入request寻找请求的文件/servlet
 		Value c = connector.getService().getContainer().getPipeline().getFirst();
-		
 		try {
 			c.invoke(req, response);
 		} catch (Exception e) {
 			System.out.println("ERROR");
 		}
-		
+		//发送文件
 		if(response.isSendF()){
 			sendFile(response);
 		}
@@ -57,6 +59,7 @@ public class Processor implements Runnable {
 		
 
 	}
+	//传输文件
 	private void sendFile(Response response){
 		String path = response.getContext() + response.getFile();	
 		String data = FileTransfer.readFile(new File(path));
@@ -76,6 +79,7 @@ public class Processor implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	//读取request
 	private String read(){
 		String reqString;
 		byte[] str = new byte[1024*1024];

@@ -14,9 +14,10 @@ public class WrapperPipeline implements Pipeline {
 	public WrapperPipeline(){
 		standardWrapper = new StandardWrapper();
 	}
-	public void setURLMap(HashMap<String, String> urlMap){
+	public void setUrlMap(HashMap<String, String> urlMap){
 		this.urlMap = urlMap;
 	}
+	//将servlet封装入对应Wrapper
 	public void addWrapper(String name, Class<?> servletClass){
 		if(firstWrapper == null){
 			firstWrapper = new ServletWrapper(urlMap.get(name), servletClass, standardWrapper);

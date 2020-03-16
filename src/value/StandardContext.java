@@ -12,10 +12,12 @@ public class StandardContext implements StandardValue{
 	public StandardContext(Container container){
 		this.container = container;
 	}
-	
+	//根据传入的Value和request，向下寻找Wrapper
+	@Override
 	public void run(Value value, Request request, Response response){
 		response.setContext(((Context)value).getPath().getAbsolutePath());
 		String file = findFile((Context)value, request.getServletPath());
+		//若request中请求的是文件
 		if(file != null){
 			try {
 				response.sendRedirect(file);
